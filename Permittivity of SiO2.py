@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -49,10 +43,4 @@ plt.legend()
 plt.grid()
 plt.title('Real and Imaginary Parts of Permittivity')
 plt.show()
-
-
-# In[ ]:
-
-
-
 
