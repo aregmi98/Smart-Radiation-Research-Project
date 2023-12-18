@@ -1,46 +1,37 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def lorentz_dielectric(epsilon_inf, A, omega, gamma, omega_val):
-    dielectric = epsilon_inf
-    for Aj, omega_j, gamma_j in zip(A, omega, gamma):
-        term = Aj * omega_j**2 / (omega_j**2 - omega_val**2 - 1j * gamma_j * omega_val)
-        dielectric += term
-    return dielectric
+# Function to calculate the Lorentz model for the dielectric function
+def lorentz_model(wavelength, epsilon, sigma, wo, gamma):
+    w = 2 * np.pi * 3e8 / wavelength  # Convert wavelength to angular frequency
+    return epsilon - (sigma / (w**2 - wo**2 + 1j * gamma * w))
 
-# Given values
-epsilon_inf = 2.0014
-A = [4.4767e27, 2.3584e28]  # Amplitudes for Lorentzian terms
-omega = [8.6732e13, 2.0219e14]  # Resonance frequencies for Lorentzian terms
-gamma = [3.3026e12, 8.3983e12]  # Damping constants for Lorentzian terms
+# Wavelength range from 2.5 to 25 micrometers
+wavelength_range = np.linspace(2.5e-6, 25e-6, 1000)
 
-# Convert wavelength range (micrometers) to frequency range
-wavelength_values = np.linspace(2.5, 25, 1000)  # Wavelength values in micrometers
-frequency_values = 3e8 / (wavelength_values * 1e-6)  # Convert to Hz
+# Coefficients from your provided values
+epsilon = 2.0014
+sigma_1 = 4.4767e27
+wo_1 = 8.6732e13
+gamma_1 = 3.3026e12
+sigma_2 = 2.3584e28
+wo_2 = 2.0219e14
+gamma_2 = 8.3983e12
 
-real_part_values = []
-imaginary_part_values = []
+# Calculate the dielectric function using Lorentz model for both components
+dielectric_function_1 = lorentz_model(wavelength_range, epsilon, sigma_1, wo_1, gamma_1)
+dielectric_function_2 = lorentz_model(wavelength_range, epsilon, sigma_2, wo_2, gamma_2)
 
-for frequency_val in frequency_values:
-    dielectric_val = lorentz_dielectric(epsilon_inf, A, omega, gamma, 2 * np.pi * frequency_val)
-    real_part = np.real(dielectric_val)
-    imaginary_part = np.imag(dielectric_val)
-    real_part_values.append(real_part)
-    imaginary_part_values.append(imaginary_part)
+# Combine the components to get the total dielectric function
+total_dielectric_function = dielectric_function_1 + dielectric_function_2
 
-# Plot both real and imaginary parts on the same plot
-plt.figure(figsize=(8, 6))
-
-# Real Part
-plt.plot(wavelength_values, real_part_values, label='Real Part', color='blue')
-
-# Imaginary Part
-plt.plot(wavelength_values, imaginary_part_values, label='Imaginary Part', color='red')
-
-plt.xlabel('Wavelength (μm)')
-plt.ylabel('Permittivity')
+# Plotting the total dielectric function
+plt.figure(figsize=(10, 6))
+plt.plot(wavelength_range * 1e6, total_dielectric_function.real, label='Real part (Total)')
+plt.plot(wavelength_range * 1e6, total_dielectric_function.imag, label='Imaginary part (Total)')
+plt.xlabel('Wavelength (micrometers)')
+plt.ylabel('Dielectric Function')
+plt.title('Total Dielectric Function of SiO2 using Lorentz Model')
 plt.legend()
-plt.grid()
-plt.title('Real and Imaginary Parts of Permittivity')
 plt.show()
 
