@@ -1,29 +1,32 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def calculate_dielectric_function(wavelength, epsilon_infinity, omega_p, gamma):
-    # Convert wavelength to angular frequency
-    omega = 2 * np.pi * 3e8 / wavelength
-    return -epsilon_infinity + omega_p**2 / (omega**2 + 1j * omega * gamma)
+def dielectric_function(wavelength, epsilon_infinity, omega_p, gamma):
+    omega = 2 * np.pi * constants.speed_of_light / wavelength
+    epsilon = -epsilon_infinity * (omega_p**2 / (omega**2 + 1j * omega * gamma))
+    return epsilon
+
+# Constants
+class constants:
+    speed_of_light = 3e8  # Speed of light in meters per second
 
 # Parameters
 epsilon_infinity = 9
 omega_p = 1.51e15  # rad/s
-gamma = 1.88e15   # rad/s
+gamma = 1.88e15    # rad/s
 
-# Wavelength range (2.5 micrometers to 25 micrometers)
-wavelength_range = np.linspace(2.5e-6, 25e-6, 1000)
+# Wavelength range
+wavelength_values = np.linspace(2.5, 25, 1000)  # Wavelength in micrometers
 
 # Calculate dielectric function for each wavelength
-dielectric_function = calculate_dielectric_function(wavelength_range, epsilon_infinity, omega_p, gamma)
+epsilon_values = dielectric_function(wavelength_values * 1e-6, epsilon_infinity, omega_p, gamma)
 
-# Plot results
-plt.figure(figsize=(8, 6))
-plt.plot(wavelength_range * 1e6, dielectric_function.real, label='Real Part')
-plt.plot(wavelength_range * 1e6, dielectric_function.imag, label='Imaginary Part')
-plt.xlabel('Wavelength (micrometers)')
+# Plotting
+plt.figure(figsize=(10, 6))
+plt.plot(wavelength_values, epsilon_values.real, label='Real Part')
+plt.plot(wavelength_values, epsilon_values.imag, label='Imaginary Part')
+plt.xlabel('Wavelength (μm)')
 plt.ylabel('Dielectric Function')
 plt.title('Dielectric Function vs Wavelength')
 plt.legend()
-plt.grid(True)
 plt.show()
