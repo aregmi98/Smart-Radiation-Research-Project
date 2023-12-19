@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Given data
+data = np.array([
+    [123, 189, 0.54],
+    [270, 13.0, 0.07],
+    [310, 7.0, 0.05],
+    [340, 0.7, 0.024],
+    [505, 3.1, 0.07],
+    [600, 4.8, 0.074],
+    [710, 0.15, 0.06],
+    [10000, 1.3, 0.4]
+])
+
+# Constants
+epsilon_infinity = 10
+epsilon_0 = 40.6
+temperature = 26 + 273  # in Kelvin
+
+# Extracting data columns
+w_values = data[:, 0]
+pi_rho_values = data[:, 1]
+y_values = data[:, 2]
+
+# Convert wavenumber to wavelength
+wavelength_values = 1 / (w_values * 1e-4)  # Convert wavenumber to micrometers
+
+# Lorentzian model function
+def lorentzian_model(wavelength, epsilon_infinity, epsilon_0, temperature, pi_rho, y):
+    frequency = 1 / wavelength
+    omega = 2 * np.pi * frequency
+    gamma = pi_rho / y
+    return epsilon_infinity + (epsilon_0 - epsilon_infinity) / (1 + (omega**2) / (gamma**2))
+
+# Calculate dielectric function for each wavelength
+epsilon_values = lorentzian_model(wavelength_values, epsilon_infinity, epsilon_0, temperature, pi_rho_values, y_values)
+
+# Plot the results
+plt.plot(wavelength_values, epsilon_values, marker='o')
+plt.xlabel('Wavelength (micrometers)')
+plt.ylabel('Permittivity')
+plt.title('Dielectric Function vs Wavelength')
+plt.show()
