@@ -8,7 +8,7 @@ The paper proposes a smart radiation device that comprises a VO2 film, a dielect
 
 A detailed calculation for emmissivity of the film, in different temperatures (phase changing for VO2) has been conducted in the paper. We wanted to run calculations for the permittivity of SiO2 and Al2O3 and generated the permittivity graph for the materials and compare them with the graphs presented in the paper. The goal was to see if the calculations and their approaches in the paper were viable. This project was aimed to determined the correct methodoly to calculate the permittivity of the materials for future research purposes. 
 
-I wrote some python codes to calculates the permittivity of the materials and the graphs were generated. Following were the graphs that we obtained from the codes:
+I wrote some python codes to calculates the permittivity of the materials and was able to generate the permittivity graphs. Following were the graphs that we obtained from the codes:
 
 ![image](https://github.com/aregmi98/Smart-Radiation-Research-Project/assets/151678499/bd22ac08-a1e3-4d09-b939-8f046fd50cc2)
 
